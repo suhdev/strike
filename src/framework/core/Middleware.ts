@@ -1,4 +1,5 @@
 import {Action} from './Action';
+import {Store} from './Store';
 export interface Middleware {
-	(arg:any,next:Middleware):Action
+	(arg:Action,store:Store):Action
 }

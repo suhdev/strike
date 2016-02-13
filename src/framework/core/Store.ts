@@ -61,14 +61,27 @@ export class Store {
 		return this.state;
 	}
 
+	public applyMiddleware(action:Action):Action{
+		let s = this;
+		return this.middleware.reduce(function(prevVal:Action, currentVal:Middleware, idx:number, arr:[Middleware]) {
+			if (!prevVal){
+				return null;
+			} 
+			return currentVal(prevVal,s);
+		}, action);
+	}
+
 	public dispatch(action: Action): any {
 		this.prevState = this.state;
 		if (this.storeState){
 			this.prevStates.push(this.prevState);
 		}
-		this.state = this.combiner.update(this.state, action);
-		this.elem.setState({
-			update:true
-		});
+		let a: Action = this.applyMiddleware(action);
+		if (a){
+			this.state = this.combiner.update(this.state, a);
+			this.elem.setState({
+				update:true
+			});
+		}
 	}
 }

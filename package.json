@@ -10,5 +10,8 @@
       "core-js": "npm:core-js@^1.1.4",
       "typescript": "npm:typescript@^1.6.2"
     }
+  },
+  "devDependencies": {
+    "bluebird": "^3.2.2"
   }
 }

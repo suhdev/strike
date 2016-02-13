@@ -8,7 +8,6 @@ class Button extends BasicComponent {
     constructor(props) {
         super(props, 'clicker');
     }
-
     render() {
         console.log(this.props);
         return (React.createElement("div", {"className": "button", "onClick": this.props.onClick}, this.props.firstName));
@@ -18,7 +17,6 @@ class Test extends ControllerView {
     constructor(props) {
         super(props);
     }
-    
     render() {
         this.passPropsToChildren();
         return (React.createElement("div", {"className": "tester"}, this.props.children));
@@ -58,7 +56,6 @@ function flicker(state, action) {
     return state;
 }
 var st = new Store({ clicker: { firstName: "Suhail", lastName: "Abood" },
-    flicker: { firstName: "Susu", lastName: "Abodi" } }, Combiner.combine(clicker, flicker),[],true);
-window.ST = st;
+    flicker: { firstName: "Susu", lastName: "Abodi" } }, Combiner.combine(clicker, flicker));
 ReactDOM.render(React.createElement(App, {"store": st}), document.getElementById('Container'));
 //# sourceMappingURL=app.js.map
