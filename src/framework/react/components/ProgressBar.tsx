@@ -6,7 +6,7 @@ export interface ProgressBarProps {
 	progress:number,
 	showPercentage:boolean
 }
-
+/*
 export class Dialog<V> extends BasicComponent<ProgressBarProps,V> {
 	constructor(props:ProgressBarProps,appStateKey:string){
 		super(props,appStateKey);
@@ -26,4 +26,4 @@ export class Dialog<V> extends BasicComponent<ProgressBarProps,V> {
 		progress:0,
 		showPercentage:false
 	};
-}
+}*/

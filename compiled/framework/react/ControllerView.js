@@ -1,24 +1,17 @@
 import { Component } from 'react';
-import { InjectPropsAndFreeze } from './InjectProps';
 export class ControllerView extends Component {
-    constructor(props) {
+    constructor(props, stateKey) {
         super(props);
         this.props = props;
         this.state = {};
+        this._storeInstance = props.store;
+        this._stateKey = stateKey;
     }
-    passPropsToChildren() {
-        let children = this.props.children, i = 0, props, key, store = this.props.store, child;
-        if (!children) {
-            return;
-        }
-        children = children instanceof Array ? children : [children];
-        for (i = 0; i < children.length; i++) {
-            child = children[i];
-            if ((key = child.props.appStateKey)) {
-                props = Object.assign({}, child.props);
-                child.props = InjectPropsAndFreeze(props, store.getStateAt(key));
-            }
-        }
+    getStateKey() {
+        return this._stateKey;
+    }
+    componentDidMount() {
+        this._storeInstance.connect(this);
     }
 }
 //# sourceMappingURL=ControllerView.js.map

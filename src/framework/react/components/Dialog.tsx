@@ -10,7 +10,7 @@ export interface DialogProps {
 	dialogType:string,
 	dialogExtra?:string
 }
-
+/*
 export class Dialog<V> extends BasicComponent<DialogProps,V> {
 	constructor(props:DialogProps,appStateKey:string){
 		super(props,appStateKey);
@@ -48,4 +48,4 @@ export class Dialog<V> extends BasicComponent<DialogProps,V> {
 		dialogType: 'default',
 		dialogExtra: ''
 	};
-}
+}*/

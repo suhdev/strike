@@ -4,31 +4,42 @@ import {Store} from '../core/Store';
 import {InjectPropsAndFreeze} from './InjectProps';
 
 export class ControllerView extends Component<any,any> {
-	constructor(props:any){
+	_storeInstance: Store;
+	_stateKey: string;
+	constructor(props:any,stateKey:string){
 		super(props);
 		this.props = props;
 		this.state = {}; 
+		this._storeInstance = props.store; 
+		this._stateKey = stateKey;
 	}
 
-	passPropsToChildren():void{
-		let children = this.props.children,
-			i=0,
-			props:any,
-			key:string,
-			store:Store = this.props.store,
-			child:any; 
-		//check if component has no children, then bail early 
-		if (!children){
-			return; 
-		}
-		children = children instanceof Array ? children : [children];
-		for (i = 0; i < children.length;i++){
-			child = children[i]; 
-			// if ((key = child.getAppStateKey && child.getAppStateKey())){
-			if ((key = child.props.appStateKey)){
-				props = Object.assign({},child.props); 
-				child.props = InjectPropsAndFreeze(props, store.getStateAt(key));
-			}		
-		}
+	getStateKey():string{
+		return this._stateKey;
 	}
+
+	componentDidMount():void{
+		this._storeInstance.connect(this);
+	}
+
+	// setStoreInstance(store:Store){
+	// 	this._storeInstance = store;
+	// }
+
+	// componentDidMount():void{
+	// 	if (this.props.children){
+	// 		if (this.props.children instanceof Array){
+	// 			this.props.children.map((e) => { 
+	// 				if (e instanceof ControllerView){
+	// 					e.setStore(this._storeInstance);
+	// 				}
+	// 			});
+	// 		}else{
+	// 			if (this.props.children instanceof ControllerView){
+	// 				this.props.children.setStore(this._storeInstance);
+	// 			}
+	// 		}
+			
+	// 	}
+	// }
 }

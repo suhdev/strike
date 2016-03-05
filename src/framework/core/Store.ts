@@ -3,34 +3,34 @@ import {Reducer} from './Reducer';
 import {Middleware} from './Middleware';
 import {Subscriber} from './Subscriber';
 import {Combiner} from './Combiner';
-import {Component} from 'react';
+import {ControllerView} from '../react/ControllerView';
 export class Store {
-	state:any
-	middleware:Array<Middleware>
-	subscribers:Array<Subscriber>
-	combiner:Combiner
-	prevState:any
-	prevStates:Array<any>
-	elem:Component<any,any>
-	storeState:boolean
+	state:any;
+	middleware:Array<Middleware>;
+	subscribers:Array<Subscriber>;
+	combiner:Combiner;
+	prevState:any;
+	prevActions:Array<any>;
+	components:ControllerView[];
+	trackChanges:boolean;
 
-	constructor(initialState:any,
+	constructor(initialState:any = {},
 		combiner:Combiner,
 		middleware:Array<Middleware>=[],
-		storeState:boolean=false){
+		trackChanges:boolean=false){
 		this.state = initialState; 
 		this.combiner = combiner;
 		this.middleware = middleware;
 		this.subscribers = [];
 		this.prevState = {};
-		this.storeState = storeState;
-		this.prevStates = [];
-		this.elem = null;
+		this.trackChanges = trackChanges;
+		this.prevActions = [];
+		this.components = [];
 
 	}
 
-	public connect(elem:Component<any,any>){
-		this.elem = elem;
+	public connect(elem:ControllerView) {
+		this.components.push(elem);
 	}
 
 	public addMiddleware(fn:Middleware):void{
@@ -45,8 +45,8 @@ export class Store {
 	}
 
 	public prev():void{
-		this.state = this.prevStates.pop() || this.state;
-		this.elem.setState({update:true});
+		let action: Action = this.prevActions.pop(); 
+		this.dispatch(action);
 	}
 
 	public subscribe(s:Subscriber){
@@ -63,25 +63,40 @@ export class Store {
 
 	public applyMiddleware(action:Action):Action{
 		let s = this;
-		return this.middleware.reduce(function(prevVal:Action, currentVal:Middleware, idx:number, arr:[Middleware]) {
-			if (!prevVal){
-				return null;
-			} 
-			return currentVal(prevVal,s);
-		}, action);
+		return this.middleware.reduce(
+			(prevVal:Action, currentVal:Middleware, idx: Number, arr: Middleware[]) => { 
+				if (!prevVal){
+					return null;
+				} 
+				return currentVal(prevVal,s);
+			},action);
 	}
 
 	public dispatch(action: Action): any {
 		this.prevState = this.state;
-		if (this.storeState){
-			this.prevStates.push(this.prevState);
+		if (this.trackChanges){
+			this.prevActions.push(action);
 		}
 		let a: Action = this.applyMiddleware(action);
 		if (a){
 			this.state = this.combiner.update(this.state, a);
-			this.elem.setState({
-				update:true
+			this.components.forEach(c => { 
+				if (this.state[c.getStateKey()]){
+					c.setState(this.state[c.getStateKey()]);
+				}
 			});
 		}
+	}
+
+	static singleton: Store;
+
+	static create(initialState: any = {},
+		combiner: Combiner,
+		middleware: Array<Middleware> = [],
+		trackChanges: boolean = false) {
+		return Store.singleton = new Store(initialState,
+			combiner,
+			middleware,
+			trackChanges); 
 	}
 }
