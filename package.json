@@ -1,4 +1,6 @@
 {
+  "name":"strikejs",
+  "version":"0.1.0",
   "jspm": {
     "dependencies": {
       "react": "npm:react@^0.14.7",
@@ -10,6 +12,11 @@
       "core-js": "npm:core-js@^1.1.4",
       "typescript": "npm:typescript@^1.6.2"
     }
+  },
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/suhdev/strike.git"
   },
   "devDependencies": {
     "bluebird": "^3.2.2"
