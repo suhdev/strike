@@ -16,6 +16,7 @@ module.exports = {
 	Store:Store,
 	Promisify:Promisify,
 	Injectable:Injectable,
+	Injector:Injector,
 	ControllerView:ControllerView,
 	extractArgumentsFromFunction:extractArgumentsFromFunction,
 	getDataAt:getDataAt,
