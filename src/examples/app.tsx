@@ -1,9 +1,9 @@
-import {ControllerView} from '../src/react/ControllerView';
+import {ControllerView} from '../react/ControllerView';
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
-import {Store} from '../src/core/Store';
-import {Combiner} from '../src/core/Combiner';
-import {Action} from '../src/core/Action';
+import {Store} from '../core/Store';
+import {Combiner} from '../core/Combiner';
+import {Action} from '../core/Action';
 class Button extends React.Component<any,any>{
 	constructor(props:any){
 		super(props);
