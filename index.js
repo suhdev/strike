@@ -1,11 +1,10 @@
-import {Combiner} from './lib/core/Combiner'; 
-import {Store} from './lib/core/Store'; 
-import {Promisify} from './lib/middleware/PromisifyMiddleware';
-import {ControllerView} from './lib/react/ControllerView';
-
-export default {
-	Combiner,
-	Store,
-	Promisify,
-	ControllerView
+export const Combiner = require('./lib/core/Combiner');
+export const Store = require('./lib/core/Store');
+export const Promisify = require('./lib/middleware/PromisifyMiddleware');
+export const ControllerView = require('./lib/react/ControllerView'); 
+module.exports = {
+	Combiner:Combiner,
+	Store:Store,
+	Promisify:Promisify,
+	ControllerView:ControllerView
 };
