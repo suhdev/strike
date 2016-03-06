@@ -2,6 +2,7 @@
 const Combiner = require('./lib/core/Combiner').Combiner;
 const Store = require('./lib/core/Store').Store;
 const Promisify = require('./lib/middleware/PromisifyMiddleware').Promisify;
+const Injectable = require('./lib/middleware/InjectableMiddleware').Injectable
 const ControllerView = require('./lib/react/ControllerView').ControllerView;
 const Injector = require('./lib/core/Injector').Injector;
 const Util = require('./lib/core/Util');
@@ -14,6 +15,7 @@ module.exports = {
 	Combiner:Combiner,
 	Store:Store,
 	Promisify:Promisify,
+	Injectable:Injectable,
 	ControllerView:ControllerView,
 	extractArgumentsFromFunction:extractArgumentsFromFunction,
 	getDataAt:getDataAt,
