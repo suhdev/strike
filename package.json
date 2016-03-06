@@ -1,6 +1,7 @@
 {
   "name":"strikejs",
   "version":"0.1.1",
+  "main":"index.js",
   "jspm": {
     "dependencies": {
       "react": "npm:react@^0.14.7",
