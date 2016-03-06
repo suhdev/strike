@@ -17,19 +17,21 @@ export function extractArgumentsFromFunction(fn: Function): any {
 	return deps;
 }
 
-export function getDataAt(object: any, path: string, pathSep: string = '.'): any {
+export function getDataAt(object: any, path: string, p: string): any {
 	let o: any = object,
 		key: string,
 		temp: any,
+		pathSep: string = p ? p : '.',
 		list: string[] = path.split(pathSep);
 	while ((key = list.shift()) && (temp = o[key]) && (o = temp));
 	return temp;
 }
 
-export function setDataAt(object: any, path: string, value: any, pathSep: string = '.'): any {
+export function setDataAt(object: any, path: string, value: any, p: string): any {
 	let o: any = object,
 		key: string,
 		temp: any,
+		pathSep: string = p ? p : '.',
 		list: string[] = path.split(pathSep),
 		lastKey: string = list.length > 0 ? list.splice(list.length - 1, 1)[0] : null;
 	while ((key = list.shift()) && ((temp = o[key]) || (temp = o[key] = {})) && (o = temp));

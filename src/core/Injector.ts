@@ -26,11 +26,11 @@ export class Injector {
 		return this.instances[name];
 	}
 
-	public injectFunction(fn:any,ctx:any=null,...args:any[]){
+	public injectFunction(fn:any,ctx?:any,...args:any[]){
 		if (typeof fn !== "function"){
 			throw new Error("Injector: provided argument is not a function");
 		}
-		let a: any, all: Array<any> = [];
+		let a: any, all: Array<any> = [],ccc:any = ctx || null;
 		fn.$inject = fn.$inject || extractArgumentsFromFunction(fn);
 		if (!fn.$inject || fn.$inject.length === 0){
 			return fn.factory ? fn.factory() : fn();
@@ -39,7 +39,7 @@ export class Injector {
 		while ((a = fn.$inject.shift())) {
 			all.push(this.get(a));
 		}
-		return fn.factory ? fn.factory.apply(ctx, [].concat(all,Array.prototype.slice.call(args,0))) : fn.apply(ctx, [].concat(all,Array.prototype.slice.call(args,0)));
+		return fn.factory ? fn.factory.apply(ccc, [].concat(all,Array.prototype.slice.call(args,0))) : fn.apply(ccc, [].concat(all,Array.prototype.slice.call(args,0)));
 
 	}
 
