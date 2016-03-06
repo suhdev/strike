@@ -1,5 +1,4 @@
 'use strict';
-import * as Promise from 'bluebird';
 import {Dictionary, extractArgumentsFromFunction} from './Util';
 export class Injector {
 	components: Dictionary<any>;
