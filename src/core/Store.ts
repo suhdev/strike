@@ -15,16 +15,16 @@ export class Store {
 	components:ControllerView[];
 	trackChanges:boolean;
 
-	constructor(initialState:any = {},
+	constructor(initialState:any,
 		combiner:Combiner,
-		middleware:Array<Middleware>=[],
-		trackChanges:boolean=false){
-		this.state = initialState; 
+		middleware?:Array<Middleware>,
+		trackChanges?:boolean){
+		this.state = initialState || {}; 
 		this.combiner = combiner;
-		this.middleware = middleware;
+		this.middleware = middleware || [];
 		this.subscribers = [];
 		this.prevState = {};
-		this.trackChanges = trackChanges;
+		this.trackChanges = trackChanges || false;
 		this.prevActions = [];
 		this.components = [];
 
@@ -91,10 +91,10 @@ export class Store {
 
 	static singleton: Store;
 
-	static create(initialState: any = {},
+	static create(initialState: any,
 		combiner: Combiner,
-		middleware: Array<Middleware> = [],
-		trackChanges: boolean = false) {
+		middleware?: Array<Middleware>,
+		trackChanges?: boolean) {
 		return Store.singleton = new Store(initialState,
 			combiner,
 			middleware,

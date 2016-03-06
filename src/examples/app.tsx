@@ -96,11 +96,11 @@ function flicker(state:any,action:Action){
 }
 
 
-var st: Store = new Store({ clicker: { firstName: "Suhail",lastName:"Abood" },
+var st: Store = Store.create({ 
+	clicker: { firstName: "Suhail",lastName:"Abood" },
 	flicker:{firstName:"Susu",lastName:"Abodi"},
-	twister:{
-		logical:'track'
-	} }, Combiner.combine(clicker,flicker));
+	twister: { logical: 'track' } 
+	}, Combiner.combine(clicker,flicker));
 
 
 ReactDOM.render(<App store={st}/>, document.getElementById('Container') ,function(){
