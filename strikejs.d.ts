@@ -62,6 +62,8 @@ declare module "strikejs" {
 		prevActions: Array<any>;
 		components: ControllerView[];
 		trackChanges: boolean;
+		readyForAction: boolean;
+		queue: Action[];
 
 		new(initialState: any,
 			combiner: Combiner,
@@ -74,12 +76,16 @@ declare module "strikejs" {
 
 		removeMiddleware(fn: Middleware): void;
 
+
+
 		prev(): void;
 
 		subscribe(s: Subscriber): void;
 		getStateAt(key: string): any;
 
 		getState(): any;
+
+		ready():void
 
 		applyMiddleware(action: Action): Action;
 

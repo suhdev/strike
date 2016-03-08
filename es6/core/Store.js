@@ -1,5 +1,6 @@
 export class Store {
     constructor(initialState, combiner, middleware, trackChanges) {
+        this.readyForActions = false;
         this.state = initialState || {};
         this.combiner = combiner;
         this.middleware = middleware || [];
@@ -44,6 +45,10 @@ export class Store {
         }, action);
     }
     dispatch(action) {
+        if (!this.readyForActions) {
+            this.queue.push(action);
+            return;
+        }
         this.prevState = this.state;
         if (this.trackChanges) {
             this.prevActions.push(action);
@@ -56,6 +61,13 @@ export class Store {
                     c.setState(this.state[c.getStateKey()]);
                 }
             });
+        }
+    }
+    ready() {
+        this.readyForActions = true;
+        let a;
+        while ((a = this.queue.shift())) {
+            this.dispatch(a);
         }
     }
     static create(initialState, combiner, middleware, trackChanges) {

@@ -7,6 +7,7 @@ import {ControllerView} from '../react/ControllerView';
 import {Action} from './Action';
 export class Store {
 	state:any;
+	queue: Action[];
 	middleware:Array<Middleware>;
 	subscribers:Array<Subscriber>;
 	combiner:Combiner;
@@ -14,11 +15,13 @@ export class Store {
 	prevActions:Array<any>;
 	components:ControllerView[];
 	trackChanges:boolean;
+	readyForActions: boolean;
 
 	constructor(initialState:any,
 		combiner:Combiner,
 		middleware?:Array<Middleware>,
 		trackChanges?:boolean){
+		this.readyForActions = false;
 		this.state = initialState || {}; 
 		this.combiner = combiner;
 		this.middleware = middleware || [];
@@ -27,7 +30,6 @@ export class Store {
 		this.trackChanges = trackChanges || false;
 		this.prevActions = [];
 		this.components = [];
-
 	}
 
 	public connect(elem:ControllerView) {
@@ -74,6 +76,10 @@ export class Store {
 	}
 
 	public dispatch(action: Action): any {
+		if (!this.readyForActions){
+			this.queue.push(action);
+			return;
+		}
 		this.prevState = this.state;
 		if (this.trackChanges){
 			this.prevActions.push(action);
@@ -86,6 +92,14 @@ export class Store {
 					c.setState(this.state[c.getStateKey()]);
 				}
 			});
+		}
+	}
+
+	public ready():void{
+		this.readyForActions = true;
+		let a: Action;
+		while((a = this.queue.shift())){
+			this.dispatch(a);
 		}
 	}
 
