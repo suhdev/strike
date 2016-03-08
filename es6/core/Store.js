@@ -9,6 +9,7 @@ export class Store {
         this.trackChanges = trackChanges || false;
         this.prevActions = [];
         this.components = [];
+        this.queue = [];
     }
     connect(elem) {
         this.components.push(elem);

@@ -30,6 +30,7 @@ export class Store {
 		this.trackChanges = trackChanges || false;
 		this.prevActions = [];
 		this.components = [];
+		this.queue = [];
 	}
 
 	public connect(elem:ControllerView) {
