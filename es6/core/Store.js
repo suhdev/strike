@@ -1,7 +1,8 @@
+import * as Immutable from 'immutable';
 export class Store {
     constructor(initialState, combiner, middleware, trackChanges) {
         this.readyForActions = false;
-        this.state = initialState || {};
+        this.state = initialState || Immutable.Map({});
         this.combiner = combiner;
         this.middleware = middleware || [];
         this.subscribers = [];
@@ -56,10 +57,12 @@ export class Store {
         }
         let a = this.applyMiddleware(action);
         if (a) {
+            let prevState = this.state, temp;
             this.state = this.combiner.update(this.state, a);
             this.components.forEach(c => {
-                if (this.state[c.getStateKey()]) {
-                    c.setState(this.state[c.getStateKey()]);
+                temp = this.state.get(c.getStateKey());
+                if (temp && prevState.get(c.getStateKey()) !== temp) {
+                    c.setState(temp);
                 }
             });
         }

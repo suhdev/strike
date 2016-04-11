@@ -1,5 +1,5 @@
 import {Action} from './Action';
 export interface Reducer{
-	(state:any,action:Action):any
-	name:string
+	(state: any, action: Action): any;
+	name: string;
 }

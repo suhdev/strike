@@ -5,6 +5,7 @@ import {Subscriber} from './Subscriber';
 import {Combiner} from './Combiner';
 import {ControllerView} from '../react/ControllerView';
 import {Action} from './Action';
+import * as Immutable from 'immutable';
 export class Store {
 	state:any;
 	queue: Action[];
@@ -17,12 +18,12 @@ export class Store {
 	trackChanges:boolean;
 	readyForActions: boolean;
 
-	constructor(initialState:any,
+	constructor(initialState:Immutable.Map<string,any>,
 		combiner:Combiner,
 		middleware?:Array<Middleware>,
 		trackChanges?:boolean){
 		this.readyForActions = false;
-		this.state = initialState || {}; 
+		this.state = initialState || Immutable.Map<string,any>({}); 
 		this.combiner = combiner;
 		this.middleware = middleware || [];
 		this.subscribers = [];
@@ -87,10 +88,12 @@ export class Store {
 		}
 		let a: Action = this.applyMiddleware(action);
 		if (a){
+			let prevState = this.state,temp:any; 
 			this.state = this.combiner.update(this.state, a);
 			this.components.forEach(c => { 
-				if (this.state[c.getStateKey()]){
-					c.setState(this.state[c.getStateKey()]);
+				temp = this.state.get(c.getStateKey());
+				if ( temp && prevState.get(c.getStateKey()) !== temp){
+					c.setState(temp);
 				}
 			});
 		}

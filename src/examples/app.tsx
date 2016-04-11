@@ -4,6 +4,7 @@ import * as React from 'react';
 import {Store} from '../core/Store';
 import {Combiner} from '../core/Combiner';
 import {Action} from '../core/Action';
+import {Reducer} from '../core/Reducer';
 class Button extends React.Component<any,any>{
 	constructor(props:any){
 		super(props);
