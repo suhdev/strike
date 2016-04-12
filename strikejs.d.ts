@@ -65,10 +65,17 @@ declare module "strikejs" {
 		readyForAction: boolean;
 		queue: Action[];
 
+		constructor(initialState: any,
+			combiner: Combiner,
+			middleware?: Array<Middleware>,
+			trackChanges?: boolean,
+			readiness?: boolean);
+
 		new(initialState: any,
 			combiner: Combiner,
-			middleware: Array<Middleware>,
-			trackChanges: boolean): Store;
+			middleware?: Array<Middleware>,
+			trackChanges?: boolean,
+			readiness?:boolean): Store;
 
 		connect(elem: ControllerView): void;
 
@@ -93,8 +100,9 @@ declare module "strikejs" {
 		static singleton: Store;
 		static create(initialState: any,
 			combiner: Combiner,
-			middleware: Array<Middleware>,
-			trackChanges: boolean): Store;
+			middleware?: Array<Middleware>,
+			trackChanges?: boolean,
+			readiness?:boolean): Store;
 
 	}
 

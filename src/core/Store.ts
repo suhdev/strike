@@ -21,9 +21,10 @@ export class Store {
 	constructor(initialState:Immutable.Map<string,any>,
 		combiner:Combiner,
 		middleware?:Array<Middleware>,
-		trackChanges?:boolean){
+		trackChanges?:boolean,
+		readiness?:boolean){
 		let v:any = Immutable.Map;
-		this.readyForActions = false;
+		this.readyForActions = readiness || false;
 		this.state = initialState || new v({}); 
 		this.combiner = combiner;
 		this.middleware = middleware || [];
@@ -116,10 +117,12 @@ export class Store {
 	static create(initialState: any,
 		combiner: Combiner,
 		middleware?: Array<Middleware>,
-		trackChanges?: boolean) {
+		trackChanges?: boolean,
+		readiness?:boolean) {
 		return Store.singleton = new Store(initialState,
 			combiner,
 			middleware,
-			trackChanges); 
+			trackChanges,
+			readiness); 
 	}
 }
