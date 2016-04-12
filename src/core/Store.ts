@@ -22,8 +22,9 @@ export class Store {
 		combiner:Combiner,
 		middleware?:Array<Middleware>,
 		trackChanges?:boolean){
+		let v:any = Immutable.Map;
 		this.readyForActions = false;
-		this.state = initialState || Immutable.Map<string,any>({}); 
+		this.state = initialState || new v({}); 
 		this.combiner = combiner;
 		this.middleware = middleware || [];
 		this.subscribers = [];
