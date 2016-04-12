@@ -66,7 +66,6 @@ export class Store {
                     c.setState(temp.toObject());
                 }
                 else {
-                    console.log('test');
                     c.setState(temp);
                 }
             });

@@ -14,7 +14,7 @@ class Button extends React.Component {
 }
 class Test extends ControllerView {
     constructor(props) {
-        super(props, 'clicker');
+        super(props, 'click');
     }
     onClick(evt, type) {
         this.props.store.dispatch({
@@ -58,6 +58,7 @@ class App extends ControllerView {
     }
 }
 function clicker(state, action) {
+    console.log(state);
     if (action.type === 'Testing') {
         return { firstName: 'Haneen', lastName: 'Ayad' };
     }
@@ -70,11 +71,14 @@ function flicker(state, action) {
     }
     return state;
 }
+var combiner = new Combiner();
+combiner.addReducer('click', clicker);
+combiner.addReducer(flicker);
 var st = Store.create(Immutable.Map({
-    clicker: { firstName: "Suhail", lastName: "Abood" },
+    click: { firstName: "Suhail", lastName: "Abood" },
     flicker: { firstName: "Susu", lastName: "Abodi" },
     twister: { logical: 'track' }
-}), Combiner.combine(clicker, flicker));
+}), combiner);
 ReactDOM.render(React.createElement(App, {store: st}), document.getElementById('Container'), function () {
     st.ready();
     st.dispatch({

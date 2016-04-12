@@ -49,6 +49,7 @@ export class Combiner {
 			temp2: any = null,
 			temp: any = null;
 			// newState:Immutable.Map<string,any> = Object.assign({},prevState);
+
 		for(key in reducers) {
 			temp2 = state.get(key);
 			temp = reducers[key](temp2, action);

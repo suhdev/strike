@@ -23335,7 +23335,6 @@ $__System.register('15f', ['160', '1d', '1e'], function (_export) {
                                     temp = undefined;
                                 _this.state = _this.combiner.update(_this.state, a);
                                 _this.components.forEach(function (c) {
-                                    console.log('suhail here');
                                     temp = _this.state.get(c.getStateKey());
                                     if (temp && Immutable.Map.isMap(temp) && temp !== prevState.get(c.getStateKey())) {
                                         c.setState(temp.toObject());
@@ -27481,9 +27480,10 @@ $__System.registerDynamic("160", ["165"], true, function($__require, exports, mo
 });
 
 $__System.register('1', ['160', '164', 'e', '1a', '1d', '1e', '1b', 'bf', '1c', '15f'], function (_export) {
-    var Immutable, Combiner, _get, _inherits, _createClass, _classCallCheck, ControllerView, ReactDOM, React, Store, Button, Test, Test2, App, st;
+    var Immutable, Combiner, _get, _inherits, _createClass, _classCallCheck, ControllerView, ReactDOM, React, Store, Button, Test, Test2, App, combiner, st;
 
     function clicker(state, action) {
+        console.log(state);
         if (action.type === 'Testing') {
             return { firstName: 'Haneen', lastName: 'Ayad' };
         }
@@ -27546,7 +27546,7 @@ $__System.register('1', ['160', '164', 'e', '1a', '1d', '1e', '1b', 'bf', '1c', 
                 function Test(props) {
                     _classCallCheck(this, Test);
 
-                    _get(Object.getPrototypeOf(Test.prototype), 'constructor', this).call(this, props, 'clicker');
+                    _get(Object.getPrototypeOf(Test.prototype), 'constructor', this).call(this, props, 'click');
                 }
 
                 _createClass(Test, [{
@@ -27626,11 +27626,15 @@ $__System.register('1', ['160', '164', 'e', '1a', '1d', '1e', '1b', 'bf', '1c', 
                 return App;
             })(ControllerView);
 
+            combiner = new Combiner();
+
+            combiner.addReducer('click', clicker);
+            combiner.addReducer(flicker);
             st = Store.create(Immutable.Map({
-                clicker: { firstName: "Suhail", lastName: "Abood" },
+                click: { firstName: "Suhail", lastName: "Abood" },
                 flicker: { firstName: "Susu", lastName: "Abodi" },
                 twister: { logical: 'track' }
-            }), Combiner.combine(clicker, flicker));
+            }), combiner);
 
             ReactDOM.render(React.createElement(App, { store: st }), document.getElementById('Container'), function () {
                 st.ready();
