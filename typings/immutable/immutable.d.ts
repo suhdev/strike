@@ -2537,6 +2537,6 @@ declare module Immutable {
 
 }
 
-declare module "immutable" {
+declare module "immutable-js" {
   export = Immutable
 }

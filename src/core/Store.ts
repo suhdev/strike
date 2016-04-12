@@ -5,7 +5,7 @@ import {Subscriber} from './Subscriber';
 import {Combiner} from './Combiner';
 import {ControllerView} from '../react/ControllerView';
 import {Action} from './Action';
-import * as Immutable from 'immutable';
+import * as Immutable from 'immutable-js';
 export class Store {
 	state:any;
 	queue: Action[];

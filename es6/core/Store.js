@@ -1,4 +1,4 @@
-import * as Immutable from 'immutable';
+import * as Immutable from 'immutable-js';
 export class Store {
     constructor(initialState, combiner, middleware, trackChanges) {
         this.readyForActions = false;
