@@ -5,7 +5,7 @@ import {Subscriber} from './Subscriber';
 import {Combiner} from './Combiner';
 import {ControllerView} from '../react/ControllerView';
 import {Action} from './Action';
-import * as Immutable from 'immutable-js';
+import * as Immutable from 'immutable';
 export class Store {
 	state:any;
 	queue: Action[];
@@ -94,7 +94,7 @@ export class Store {
 			this.components.forEach(c => { 
 				temp = this.state.get(c.getStateKey());
 				if ( temp && prevState.get(c.getStateKey()) !== temp){
-					c.setState(temp);
+					c.setState(temp.toObject());
 				}
 			});
 		}

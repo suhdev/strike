@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom';
 import * as React from 'react';
 import { Store } from '../core/Store';
 import { Combiner } from '../core/Combiner';
+import * as Immutable from 'immutable';
 class Button extends React.Component {
     constructor(props) {
         super(props);
@@ -60,16 +61,17 @@ function clicker(state, action) {
     return state;
 }
 function flicker(state, action) {
+    console.log(state);
     if (action.type === 'Click') {
         return { firstName: action.data.firstName, lastName: 'Debug' };
     }
     return state;
 }
-var st = Store.create({
+var st = Store.create(Immutable.Map({
     clicker: { firstName: "Suhail", lastName: "Abood" },
     flicker: { firstName: "Susu", lastName: "Abodi" },
     twister: { logical: 'track' }
-}, Combiner.combine(clicker, flicker));
+}), Combiner.combine(clicker, flicker));
 ReactDOM.render(React.createElement(App, {store: st}), document.getElementById('Container'), function () {
     st.dispatch({
         type: 'Init',

@@ -1,4 +1,4 @@
-import * as Immutable from 'immutable-js';
+import * as Immutable from 'immutable';
 export class Store {
     constructor(initialState, combiner, middleware, trackChanges) {
         let v = Immutable.Map;
@@ -63,7 +63,7 @@ export class Store {
             this.components.forEach(c => {
                 temp = this.state.get(c.getStateKey());
                 if (temp && prevState.get(c.getStateKey()) !== temp) {
-                    c.setState(temp);
+                    c.setState(temp.toObject());
                 }
             });
         }
