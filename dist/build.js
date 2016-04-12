@@ -23247,11 +23247,11 @@ $__System.register('15f', ['160', '1d', '1e'], function (_export) {
             'use strict';
 
             Store = (function () {
-                function Store(initialState, combiner, middleware, trackChanges) {
+                function Store(initialState, combiner, middleware, trackChanges, readiness) {
                     _classCallCheck(this, Store);
 
                     var v = Immutable.Map;
-                    this.readyForActions = false;
+                    this.readyForActions = readiness || false;
                     this.state = initialState || new v({});
                     this.combiner = combiner;
                     this.middleware = middleware || [];
@@ -23328,7 +23328,6 @@ $__System.register('15f', ['160', '1d', '1e'], function (_export) {
                         if (this.trackChanges) {
                             this.prevActions.push(action);
                         }
-                        console.log('hey dispatch');
                         var a = this.applyMiddleware(action);
                         if (a) {
                             (function () {
@@ -23336,10 +23335,12 @@ $__System.register('15f', ['160', '1d', '1e'], function (_export) {
                                     temp = undefined;
                                 _this.state = _this.combiner.update(_this.state, a);
                                 _this.components.forEach(function (c) {
+                                    console.log('suhail here');
                                     temp = _this.state.get(c.getStateKey());
                                     if (temp && Immutable.Map.isMap(temp) && temp !== prevState.get(c.getStateKey())) {
                                         c.setState(temp.toObject());
                                     } else {
+                                        console.log('test');
                                         c.setState(temp);
                                     }
                                 });
@@ -23357,8 +23358,8 @@ $__System.register('15f', ['160', '1d', '1e'], function (_export) {
                     }
                 }], [{
                     key: 'create',
-                    value: function create(initialState, combiner, middleware, trackChanges) {
-                        return Store.singleton = new Store(initialState, combiner, middleware, trackChanges);
+                    value: function create(initialState, combiner, middleware, trackChanges, readiness) {
+                        return Store.singleton = new Store(initialState, combiner, middleware, trackChanges, readiness);
                     }
                 }]);
 

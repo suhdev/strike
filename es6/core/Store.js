@@ -1,8 +1,8 @@
 import * as Immutable from 'immutable';
 export class Store {
-    constructor(initialState, combiner, middleware, trackChanges) {
+    constructor(initialState, combiner, middleware, trackChanges, readiness) {
         let v = Immutable.Map;
-        this.readyForActions = false;
+        this.readyForActions = readiness || false;
         this.state = initialState || new v({});
         this.combiner = combiner;
         this.middleware = middleware || [];
@@ -66,6 +66,7 @@ export class Store {
                     c.setState(temp.toObject());
                 }
                 else {
+                    console.log('test');
                     c.setState(temp);
                 }
             });
@@ -78,8 +79,8 @@ export class Store {
             this.dispatch(a);
         }
     }
-    static create(initialState, combiner, middleware, trackChanges) {
-        return Store.singleton = new Store(initialState, combiner, middleware, trackChanges);
+    static create(initialState, combiner, middleware, trackChanges, readiness) {
+        return Store.singleton = new Store(initialState, combiner, middleware, trackChanges, readiness);
     }
 }
 //# sourceMappingURL=Store.js.map

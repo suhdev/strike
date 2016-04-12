@@ -98,6 +98,7 @@ export class Store {
 				if (temp && Immutable.Map.isMap(temp) && temp !== prevState.get(c.getStateKey())){
 					c.setState(temp.toObject());
 				}else {
+					console.log('test');
 					c.setState(temp);
 				}
 			});
