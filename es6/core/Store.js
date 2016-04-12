@@ -1,8 +1,9 @@
 import * as Immutable from 'immutable-js';
 export class Store {
     constructor(initialState, combiner, middleware, trackChanges) {
+        let v = Immutable.Map;
         this.readyForActions = false;
-        this.state = initialState || Immutable.Map({});
+        this.state = initialState || new v({});
         this.combiner = combiner;
         this.middleware = middleware || [];
         this.subscribers = [];
