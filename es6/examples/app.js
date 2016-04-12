@@ -23,6 +23,7 @@ class Test extends ControllerView {
         });
     }
     render() {
+        console.log(this.state);
         return (React.createElement("div", {className: "tester"}, React.createElement(Button, {firstName: this.state.firstName, onClick: this.onClick.bind(this, 'clicker')}), React.createElement(Button, {firstName: this.state.lastName, onClick: this.onClick.bind(this, 'flicker')})));
     }
 }
@@ -37,6 +38,8 @@ class Test2 extends ControllerView {
         });
     }
     render() {
+        console.log(this.state);
+        console.log(this._storeInstance);
         return (React.createElement("div", {className: "tester"}, React.createElement(Button, {firstName: this.state.firstName, onClick: this.onClick.bind(this, 'clicker')}), React.createElement(Button, {firstName: this.state.firstName, onClick: this.onClick.bind(this, 'clicker')}), React.createElement(Button, {firstName: this.state.lastName, onClick: this.onClick.bind(this, 'flicker')}), React.createElement(Button, {firstName: this.state.lastName, onClick: this.onClick.bind(this, 'flicker')})));
     }
 }
@@ -73,6 +76,7 @@ var st = Store.create(Immutable.Map({
     twister: { logical: 'track' }
 }), Combiner.combine(clicker, flicker));
 ReactDOM.render(React.createElement(App, {store: st}), document.getElementById('Container'), function () {
+    st.ready();
     st.dispatch({
         type: 'Init',
         data: 0

@@ -87,14 +87,17 @@ export class Store {
 		if (this.trackChanges){
 			this.prevActions.push(action);
 		}
+
 		let a: Action = this.applyMiddleware(action);
 		if (a){
 			let prevState = this.state,temp:any; 
 			this.state = this.combiner.update(this.state, a);
 			this.components.forEach(c => { 
 				temp = this.state.get(c.getStateKey());
-				if ( temp && prevState.get(c.getStateKey()) !== temp){
+				if (temp && Immutable.Map.isMap(temp) && temp !== prevState.get(c.getStateKey())){
 					c.setState(temp.toObject());
+				}else {
+					c.setState(temp);
 				}
 			});
 		}

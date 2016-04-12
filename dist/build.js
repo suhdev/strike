@@ -23232,7 +23232,334 @@ $__System.registerDynamic("1c", ["15e"], true, function($__require, exports, mod
   return module.exports;
 });
 
-$__System.registerDynamic("15f", [], true, function($__require, exports, module) {
+$__System.register('15f', ['160', '1d', '1e'], function (_export) {
+    var Immutable, _createClass, _classCallCheck, Store;
+
+    return {
+        setters: [function (_) {
+            Immutable = _;
+        }, function (_d) {
+            _createClass = _d['default'];
+        }, function (_e) {
+            _classCallCheck = _e['default'];
+        }],
+        execute: function () {
+            'use strict';
+
+            Store = (function () {
+                function Store(initialState, combiner, middleware, trackChanges) {
+                    _classCallCheck(this, Store);
+
+                    var v = Immutable.Map;
+                    this.readyForActions = false;
+                    this.state = initialState || new v({});
+                    this.combiner = combiner;
+                    this.middleware = middleware || [];
+                    this.subscribers = [];
+                    this.prevState = {};
+                    this.trackChanges = trackChanges || false;
+                    this.prevActions = [];
+                    this.components = [];
+                    this.queue = [];
+                }
+
+                
+
+                _createClass(Store, [{
+                    key: 'connect',
+                    value: function connect(elem) {
+                        this.components.push(elem);
+                    }
+                }, {
+                    key: 'addMiddleware',
+                    value: function addMiddleware(fn) {
+                        this.middleware.push(fn);
+                    }
+                }, {
+                    key: 'removeMiddleware',
+                    value: function removeMiddleware(fn) {
+                        var idx = this.middleware.indexOf(fn);
+                        if (idx !== -1) {
+                            this.middleware.splice(idx, 1);
+                        }
+                    }
+                }, {
+                    key: 'prev',
+                    value: function prev() {
+                        var action = this.prevActions.pop();
+                        this.dispatch(action);
+                    }
+                }, {
+                    key: 'subscribe',
+                    value: function subscribe(s) {
+                        this.subscribers.push(s);
+                    }
+                }, {
+                    key: 'getStateAt',
+                    value: function getStateAt(key) {
+                        return this.state[key];
+                    }
+                }, {
+                    key: 'getState',
+                    value: function getState() {
+                        return this.state;
+                    }
+                }, {
+                    key: 'applyMiddleware',
+                    value: function applyMiddleware(action) {
+                        var s = this;
+                        return this.middleware.reduce(function (prevVal, currentVal, idx, arr) {
+                            if (!prevVal) {
+                                return null;
+                            }
+                            return currentVal(prevVal, s);
+                        }, action);
+                    }
+                }, {
+                    key: 'dispatch',
+                    value: function dispatch(action) {
+                        var _this = this;
+
+                        if (!this.readyForActions) {
+                            this.queue.push(action);
+                            return;
+                        }
+                        this.prevState = this.state;
+                        if (this.trackChanges) {
+                            this.prevActions.push(action);
+                        }
+                        console.log('hey dispatch');
+                        var a = this.applyMiddleware(action);
+                        if (a) {
+                            (function () {
+                                var prevState = _this.state,
+                                    temp = undefined;
+                                _this.state = _this.combiner.update(_this.state, a);
+                                _this.components.forEach(function (c) {
+                                    temp = _this.state.get(c.getStateKey());
+                                    if (temp && Immutable.Map.isMap(temp) && temp !== prevState.get(c.getStateKey())) {
+                                        c.setState(temp.toObject());
+                                    } else {
+                                        c.setState(temp);
+                                    }
+                                });
+                            })();
+                        }
+                    }
+                }, {
+                    key: 'ready',
+                    value: function ready() {
+                        this.readyForActions = true;
+                        var a = undefined;
+                        while (a = this.queue.shift()) {
+                            this.dispatch(a);
+                        }
+                    }
+                }], [{
+                    key: 'create',
+                    value: function create(initialState, combiner, middleware, trackChanges) {
+                        return Store.singleton = new Store(initialState, combiner, middleware, trackChanges);
+                    }
+                }]);
+
+                return Store;
+            })();
+
+            _export('Store', Store);
+        }
+    };
+});
+$__System.registerDynamic("c", [], true, function($__require, exports, module) {
+  ;
+  var define,
+      global = this,
+      GLOBAL = this;
+  var $Object = Object;
+  module.exports = {
+    create: $Object.create,
+    getProto: $Object.getPrototypeOf,
+    isEnum: {}.propertyIsEnumerable,
+    getDesc: $Object.getOwnPropertyDescriptor,
+    setDesc: $Object.defineProperty,
+    setDescs: $Object.defineProperties,
+    getKeys: $Object.keys,
+    getNames: $Object.getOwnPropertyNames,
+    getSymbols: $Object.getOwnPropertySymbols,
+    each: [].forEach
+  };
+  return module.exports;
+});
+
+$__System.registerDynamic("161", ["c"], true, function($__require, exports, module) {
+  ;
+  var define,
+      global = this,
+      GLOBAL = this;
+  var $ = $__require('c');
+  module.exports = function defineProperty(it, key, desc) {
+    return $.setDesc(it, key, desc);
+  };
+  return module.exports;
+});
+
+$__System.registerDynamic("162", ["161"], true, function($__require, exports, module) {
+  ;
+  var define,
+      global = this,
+      GLOBAL = this;
+  module.exports = {
+    "default": $__require('161'),
+    __esModule: true
+  };
+  return module.exports;
+});
+
+$__System.registerDynamic("1d", ["162"], true, function($__require, exports, module) {
+  "use strict";
+  ;
+  var define,
+      global = this,
+      GLOBAL = this;
+  var _Object$defineProperty = $__require('162')["default"];
+  exports["default"] = (function() {
+    function defineProperties(target, props) {
+      for (var i = 0; i < props.length; i++) {
+        var descriptor = props[i];
+        descriptor.enumerable = descriptor.enumerable || false;
+        descriptor.configurable = true;
+        if ("value" in descriptor)
+          descriptor.writable = true;
+        _Object$defineProperty(target, descriptor.key, descriptor);
+      }
+    }
+    return function(Constructor, protoProps, staticProps) {
+      if (protoProps)
+        defineProperties(Constructor.prototype, protoProps);
+      if (staticProps)
+        defineProperties(Constructor, staticProps);
+      return Constructor;
+    };
+  })();
+  exports.__esModule = true;
+  return module.exports;
+});
+
+$__System.registerDynamic("1e", [], true, function($__require, exports, module) {
+  "use strict";
+  ;
+  var define,
+      global = this,
+      GLOBAL = this;
+  exports["default"] = function(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  };
+  exports.__esModule = true;
+  return module.exports;
+});
+
+$__System.registerDynamic("163", [], true, function($__require, exports, module) {
+  "use strict";
+  ;
+  var define,
+      global = this,
+      GLOBAL = this;
+  exports["default"] = Function.prototype.bind;
+  exports.__esModule = true;
+  return module.exports;
+});
+
+$__System.register("164", ["163", "1d", "1e"], function (_export) {
+    var _bind, _createClass, _classCallCheck, Combiner;
+
+    return {
+        setters: [function (_) {
+            _bind = _["default"];
+        }, function (_d) {
+            _createClass = _d["default"];
+        }, function (_e) {
+            _classCallCheck = _e["default"];
+        }],
+        execute: function () {
+            "use strict";
+
+            Combiner = (function () {
+                function Combiner() {
+                    _classCallCheck(this, Combiner);
+
+                    this.reducers = {};
+                    var i = 0;
+
+                    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                        args[_key] = arguments[_key];
+                    }
+
+                    for (i = 0; i < args.length; i++) {
+                        this.addReducer(args[i]);
+                    }
+                }
+
+                
+
+                _createClass(Combiner, [{
+                    key: "addReducer",
+                    value: function addReducer(r) {
+                        if (typeof r === "string" && arguments.length === 2) {
+                            this.reducers[r] = arguments[1];
+                        } else if (typeof r === "function" && r.$name) {
+                            this.reducers[r.$name] = r;
+                        } else if (typeof r === "function" && r.name) {
+                            this.reducers[r.name] = r;
+                        }
+                    }
+                }, {
+                    key: "removeReducer",
+                    value: function removeReducer(r) {
+                        if (typeof r === "function" && r.$name && this.reducers[r.$name]) {
+                            delete this.reducers[r.$name];
+                        } else if (typeof r === "function" && r.name && this.reducers[r.name]) {
+                            delete this.reducers[r.name];
+                        } else if (typeof r === "string" && this.reducers[r]) {
+                            delete this.reducers[r];
+                        }
+                    }
+                }, {
+                    key: "update",
+                    value: function update(state, action) {
+                        var newState = state,
+                            key = null,
+                            reducers = this.reducers,
+                            temp2 = null,
+                            temp = null;
+                        for (key in reducers) {
+                            temp2 = state.get(key);
+                            temp = reducers[key](temp2, action);
+                            if (temp != temp2) {
+                                newState = newState.set(key, temp);
+                            }
+                        }
+                        return newState;
+                    }
+                }], [{
+                    key: "combine",
+                    value: function combine() {
+                        for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                            args[_key2] = arguments[_key2];
+                        }
+
+                        return new (_bind.apply(Combiner, [null].concat(args)))();
+                    }
+                }]);
+
+                return Combiner;
+            })();
+
+            _export("Combiner", Combiner);
+        }
+    };
+});
+$__System.registerDynamic("165", [], true, function($__require, exports, module) {
   ;
   var define,
       global = this,
@@ -27143,341 +27470,17 @@ $__System.registerDynamic("15f", [], true, function($__require, exports, module)
   return module.exports;
 });
 
-$__System.registerDynamic("160", ["15f"], true, function($__require, exports, module) {
+$__System.registerDynamic("160", ["165"], true, function($__require, exports, module) {
   ;
   var define,
       global = this,
       GLOBAL = this;
-  module.exports = $__require('15f');
+  module.exports = $__require('165');
   return module.exports;
 });
 
-$__System.register('161', ['160', '1d', '1e'], function (_export) {
-    var Immutable, _createClass, _classCallCheck, Store;
-
-    return {
-        setters: [function (_) {
-            Immutable = _;
-        }, function (_d) {
-            _createClass = _d['default'];
-        }, function (_e) {
-            _classCallCheck = _e['default'];
-        }],
-        execute: function () {
-            'use strict';
-
-            Store = (function () {
-                function Store(initialState, combiner, middleware, trackChanges) {
-                    _classCallCheck(this, Store);
-
-                    var v = Immutable.Map;
-                    this.readyForActions = false;
-                    this.state = initialState || new v({});
-                    this.combiner = combiner;
-                    this.middleware = middleware || [];
-                    this.subscribers = [];
-                    this.prevState = {};
-                    this.trackChanges = trackChanges || false;
-                    this.prevActions = [];
-                    this.components = [];
-                    this.queue = [];
-                }
-
-                
-
-                _createClass(Store, [{
-                    key: 'connect',
-                    value: function connect(elem) {
-                        this.components.push(elem);
-                    }
-                }, {
-                    key: 'addMiddleware',
-                    value: function addMiddleware(fn) {
-                        this.middleware.push(fn);
-                    }
-                }, {
-                    key: 'removeMiddleware',
-                    value: function removeMiddleware(fn) {
-                        var idx = this.middleware.indexOf(fn);
-                        if (idx !== -1) {
-                            this.middleware.splice(idx, 1);
-                        }
-                    }
-                }, {
-                    key: 'prev',
-                    value: function prev() {
-                        var action = this.prevActions.pop();
-                        this.dispatch(action);
-                    }
-                }, {
-                    key: 'subscribe',
-                    value: function subscribe(s) {
-                        this.subscribers.push(s);
-                    }
-                }, {
-                    key: 'getStateAt',
-                    value: function getStateAt(key) {
-                        return this.state[key];
-                    }
-                }, {
-                    key: 'getState',
-                    value: function getState() {
-                        return this.state;
-                    }
-                }, {
-                    key: 'applyMiddleware',
-                    value: function applyMiddleware(action) {
-                        var s = this;
-                        return this.middleware.reduce(function (prevVal, currentVal, idx, arr) {
-                            if (!prevVal) {
-                                return null;
-                            }
-                            return currentVal(prevVal, s);
-                        }, action);
-                    }
-                }, {
-                    key: 'dispatch',
-                    value: function dispatch(action) {
-                        var _this = this;
-
-                        if (!this.readyForActions) {
-                            this.queue.push(action);
-                            return;
-                        }
-                        this.prevState = this.state;
-                        if (this.trackChanges) {
-                            this.prevActions.push(action);
-                        }
-                        var a = this.applyMiddleware(action);
-                        if (a) {
-                            (function () {
-                                var prevState = _this.state,
-                                    temp = undefined;
-                                _this.state = _this.combiner.update(_this.state, a);
-                                _this.components.forEach(function (c) {
-                                    temp = _this.state.get(c.getStateKey());
-                                    if (temp && prevState.get(c.getStateKey()) !== temp) {
-                                        c.setState(temp);
-                                    }
-                                });
-                            })();
-                        }
-                    }
-                }, {
-                    key: 'ready',
-                    value: function ready() {
-                        this.readyForActions = true;
-                        var a = undefined;
-                        while (a = this.queue.shift()) {
-                            this.dispatch(a);
-                        }
-                    }
-                }], [{
-                    key: 'create',
-                    value: function create(initialState, combiner, middleware, trackChanges) {
-                        return Store.singleton = new Store(initialState, combiner, middleware, trackChanges);
-                    }
-                }]);
-
-                return Store;
-            })();
-
-            _export('Store', Store);
-        }
-    };
-});
-$__System.registerDynamic("c", [], true, function($__require, exports, module) {
-  ;
-  var define,
-      global = this,
-      GLOBAL = this;
-  var $Object = Object;
-  module.exports = {
-    create: $Object.create,
-    getProto: $Object.getPrototypeOf,
-    isEnum: {}.propertyIsEnumerable,
-    getDesc: $Object.getOwnPropertyDescriptor,
-    setDesc: $Object.defineProperty,
-    setDescs: $Object.defineProperties,
-    getKeys: $Object.keys,
-    getNames: $Object.getOwnPropertyNames,
-    getSymbols: $Object.getOwnPropertySymbols,
-    each: [].forEach
-  };
-  return module.exports;
-});
-
-$__System.registerDynamic("162", ["c"], true, function($__require, exports, module) {
-  ;
-  var define,
-      global = this,
-      GLOBAL = this;
-  var $ = $__require('c');
-  module.exports = function defineProperty(it, key, desc) {
-    return $.setDesc(it, key, desc);
-  };
-  return module.exports;
-});
-
-$__System.registerDynamic("163", ["162"], true, function($__require, exports, module) {
-  ;
-  var define,
-      global = this,
-      GLOBAL = this;
-  module.exports = {
-    "default": $__require('162'),
-    __esModule: true
-  };
-  return module.exports;
-});
-
-$__System.registerDynamic("1d", ["163"], true, function($__require, exports, module) {
-  "use strict";
-  ;
-  var define,
-      global = this,
-      GLOBAL = this;
-  var _Object$defineProperty = $__require('163')["default"];
-  exports["default"] = (function() {
-    function defineProperties(target, props) {
-      for (var i = 0; i < props.length; i++) {
-        var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor)
-          descriptor.writable = true;
-        _Object$defineProperty(target, descriptor.key, descriptor);
-      }
-    }
-    return function(Constructor, protoProps, staticProps) {
-      if (protoProps)
-        defineProperties(Constructor.prototype, protoProps);
-      if (staticProps)
-        defineProperties(Constructor, staticProps);
-      return Constructor;
-    };
-  })();
-  exports.__esModule = true;
-  return module.exports;
-});
-
-$__System.registerDynamic("1e", [], true, function($__require, exports, module) {
-  "use strict";
-  ;
-  var define,
-      global = this,
-      GLOBAL = this;
-  exports["default"] = function(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  };
-  exports.__esModule = true;
-  return module.exports;
-});
-
-$__System.registerDynamic("164", [], true, function($__require, exports, module) {
-  "use strict";
-  ;
-  var define,
-      global = this,
-      GLOBAL = this;
-  exports["default"] = Function.prototype.bind;
-  exports.__esModule = true;
-  return module.exports;
-});
-
-$__System.register("165", ["164", "1d", "1e"], function (_export) {
-    var _bind, _createClass, _classCallCheck, Combiner;
-
-    return {
-        setters: [function (_) {
-            _bind = _["default"];
-        }, function (_d) {
-            _createClass = _d["default"];
-        }, function (_e) {
-            _classCallCheck = _e["default"];
-        }],
-        execute: function () {
-            "use strict";
-
-            Combiner = (function () {
-                function Combiner() {
-                    _classCallCheck(this, Combiner);
-
-                    this.reducers = {};
-                    var i = 0;
-
-                    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-                        args[_key] = arguments[_key];
-                    }
-
-                    for (i = 0; i < args.length; i++) {
-                        this.addReducer(args[i]);
-                    }
-                }
-
-                
-
-                _createClass(Combiner, [{
-                    key: "addReducer",
-                    value: function addReducer(r) {
-                        if (typeof r === "string" && arguments.length === 2) {
-                            this.reducers[r] = arguments[1];
-                        } else if (typeof r === "function" && r.$name) {
-                            this.reducers[r.$name] = r;
-                        } else if (typeof r === "function" && r.name) {
-                            this.reducers[r.name] = r;
-                        }
-                    }
-                }, {
-                    key: "removeReducer",
-                    value: function removeReducer(r) {
-                        if (typeof r === "function" && r.$name && this.reducers[r.$name]) {
-                            delete this.reducers[r.$name];
-                        } else if (typeof r === "function" && r.name && this.reducers[r.name]) {
-                            delete this.reducers[r.name];
-                        } else if (typeof r === "string" && this.reducers[r]) {
-                            delete this.reducers[r];
-                        }
-                    }
-                }, {
-                    key: "update",
-                    value: function update(state, action) {
-                        var newState = state,
-                            key = null,
-                            reducers = this.reducers,
-                            temp2 = null,
-                            temp = null;
-                        for (key in reducers) {
-                            temp2 = state.get(key);
-                            temp = reducers[key](temp2, action);
-                            if (temp != temp2) {
-                                newState = newState.set(key, temp);
-                            }
-                        }
-                        return newState;
-                    }
-                }], [{
-                    key: "combine",
-                    value: function combine() {
-                        for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-                            args[_key2] = arguments[_key2];
-                        }
-
-                        return new (_bind.apply(Combiner, [null].concat(args)))();
-                    }
-                }]);
-
-                return Combiner;
-            })();
-
-            _export("Combiner", Combiner);
-        }
-    };
-});
-$__System.register('1', ['161', '165', 'e', '1a', '1d', '1e', '1b', 'bf', '1c'], function (_export) {
-    var Store, Combiner, _get, _inherits, _createClass, _classCallCheck, ControllerView, ReactDOM, React, Button, Test, Test2, App, st;
+$__System.register('1', ['160', '164', 'e', '1a', '1d', '1e', '1b', 'bf', '1c', '15f'], function (_export) {
+    var Immutable, Combiner, _get, _inherits, _createClass, _classCallCheck, ControllerView, ReactDOM, React, Store, Button, Test, Test2, App, st;
 
     function clicker(state, action) {
         if (action.type === 'Testing') {
@@ -27486,16 +27489,17 @@ $__System.register('1', ['161', '165', 'e', '1a', '1d', '1e', '1b', 'bf', '1c'],
         return state;
     }
     function flicker(state, action) {
+        console.log(state);
         if (action.type === 'Click') {
             return { firstName: action.data.firstName, lastName: 'Debug' };
         }
         return state;
     }
     return {
-        setters: [function (_) {
-            Store = _.Store;
-        }, function (_2) {
-            Combiner = _2.Combiner;
+        setters: [function (_2) {
+            Immutable = _2;
+        }, function (_) {
+            Combiner = _.Combiner;
         }, function (_e) {
             _get = _e['default'];
         }, function (_a) {
@@ -27510,6 +27514,8 @@ $__System.register('1', ['161', '165', 'e', '1a', '1d', '1e', '1b', 'bf', '1c'],
             ReactDOM = _bf;
         }, function (_c) {
             React = _c;
+        }, function (_f) {
+            Store = _f.Store;
         }],
         execute: function () {
             'use strict';
@@ -27553,6 +27559,7 @@ $__System.register('1', ['161', '165', 'e', '1a', '1d', '1e', '1b', 'bf', '1c'],
                 }, {
                     key: 'render',
                     value: function render() {
+                        console.log(this.state);
                         return React.createElement("div", { className: "tester" }, React.createElement(Button, { firstName: this.state.firstName, onClick: this.onClick.bind(this, 'clicker') }), React.createElement(Button, { firstName: this.state.lastName, onClick: this.onClick.bind(this, 'flicker') }));
                     }
                 }]);
@@ -27580,6 +27587,8 @@ $__System.register('1', ['161', '165', 'e', '1a', '1d', '1e', '1b', 'bf', '1c'],
                 }, {
                     key: 'render',
                     value: function render() {
+                        console.log(this.state);
+                        console.log(this._storeInstance);
                         return React.createElement("div", { className: "tester" }, React.createElement(Button, { firstName: this.state.firstName, onClick: this.onClick.bind(this, 'clicker') }), React.createElement(Button, { firstName: this.state.firstName, onClick: this.onClick.bind(this, 'clicker') }), React.createElement(Button, { firstName: this.state.lastName, onClick: this.onClick.bind(this, 'flicker') }), React.createElement(Button, { firstName: this.state.lastName, onClick: this.onClick.bind(this, 'flicker') }));
                     }
                 }]);
@@ -27616,13 +27625,14 @@ $__System.register('1', ['161', '165', 'e', '1a', '1d', '1e', '1b', 'bf', '1c'],
                 return App;
             })(ControllerView);
 
-            st = Store.create({
+            st = Store.create(Immutable.Map({
                 clicker: { firstName: "Suhail", lastName: "Abood" },
                 flicker: { firstName: "Susu", lastName: "Abodi" },
                 twister: { logical: 'track' }
-            }, Combiner.combine(clicker, flicker));
+            }), Combiner.combine(clicker, flicker));
 
             ReactDOM.render(React.createElement(App, { store: st }), document.getElementById('Container'), function () {
+                st.ready();
                 st.dispatch({
                     type: 'Init',
                     data: 0

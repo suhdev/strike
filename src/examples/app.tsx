@@ -27,6 +27,7 @@ class Test extends ControllerView {
 	}
 
 	render(){
+		console.log(this.state);
 		return (
 			<div className="tester">
 				<Button firstName={this.state.firstName} onClick={this.onClick.bind(this,'clicker') } />
@@ -49,6 +50,8 @@ class Test2 extends ControllerView {
 	}
 
 	render() {
+		console.log(this.state);
+		console.log(this._storeInstance)
 		return (
 			<div className="tester">
 				<Button firstName={this.state.firstName} onClick={this.onClick.bind(this, 'clicker') } />
@@ -107,6 +110,7 @@ var st: Store = Store.create(Immutable.Map({
 
 
 ReactDOM.render(<App store={st}/>, document.getElementById('Container') ,function(){
+	st.ready();
 	st.dispatch({
 		type:'Init',
 		data:0
