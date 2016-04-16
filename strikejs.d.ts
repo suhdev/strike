@@ -43,10 +43,14 @@ declare module "strikejs" {
 		onStateChanged(newState: any): void
 	}
 
-	export class ControllerView extends Component<any, any> {
+	export interface ControllerViewProps {
+		store: Store;
+	}
+
+	export class ControllerView<T extends ControllerViewProps,V> extends Component<T, V> {
 		_storeInstance: Store;
 		_stateKey: string;
-		new(props: any, stateKey: string): ControllerView;
+		new(props: any, stateKey: string): ControllerView<T,V>;
 
 		getStateKey(): string;
 
@@ -60,7 +64,7 @@ declare module "strikejs" {
 		combiner: Combiner;
 		prevState: any;
 		prevActions: Array<any>;
-		components: ControllerView[];
+		components: ControllerView <any, any > [];
 		trackChanges: boolean;
 		readyForAction: boolean;
 		queue: Action[];
@@ -77,7 +81,7 @@ declare module "strikejs" {
 			trackChanges?: boolean,
 			readiness?:boolean): Store;
 
-		connect(elem: ControllerView): void;
+		connect<T extends ControllerViewProps>(elem: ControllerView<T,any>): void;
 
 		addMiddleware(fn: Middleware): void;
 
@@ -109,6 +113,7 @@ declare module "strikejs" {
 	export class Combiner {
 		//static combine(...args: Reducer[]):Combiner;
 		reducers: Dictionary<Reducer>;
+		constructor(...args: Reducer[]);
 		new(...args: Reducer[]): Combiner;
 
 		addReducer(reducer: Reducer): void;
@@ -127,6 +132,7 @@ declare module "strikejs" {
 		components: Dictionary<any>;
 		instances: Dictionary<any>;
 		private stack: Array<any>;
+		constructor();
 		new(): Injector;
 
 		public addInstance(name: string, c: any): void;
