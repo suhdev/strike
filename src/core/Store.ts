@@ -95,8 +95,10 @@ export class Store {
 			this.state = this.combiner.update(this.state, a);
 			this.components.forEach(c => { 
 				temp = this.state.get(c.getStateKey());
-				if (temp && Immutable.Map.isMap(temp) && temp !== prevState.get(c.getStateKey())){
-					c.setState(temp.toObject());
+				if (Immutable.Map.isMap(temp)){
+					if (temp && temp !== prevState.get(c.getStateKey())) {
+						c.setState(temp.toObject());
+					}
 				}else {
 					c.setState(temp);
 				}
