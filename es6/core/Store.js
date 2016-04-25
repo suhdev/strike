@@ -38,6 +38,12 @@ export class Store {
     getState() {
         return this.state;
     }
+    replaceStateAt(key, val) {
+        this.state = this.state.set(key, val);
+    }
+    deleteStateAt(key) {
+        this.state = this.state.delete(key);
+    }
     applyMiddleware(action) {
         let s = this;
         return this.middleware.reduce((prevVal, currentVal, idx, arr) => {

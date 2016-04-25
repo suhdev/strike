@@ -68,6 +68,14 @@ export class Store {
 		return this.state;
 	}
 
+	public replaceStateAt(key:string,val:any){
+		this.state = this.state.set(key, val);
+	}
+
+	public deleteStateAt(key:string){
+		this.state = this.state.delete(key);
+	}
+
 	public applyMiddleware(action:Action):Action{
 		let s = this;
 		return this.middleware.reduce(
