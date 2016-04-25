@@ -13,5 +13,8 @@ export class ControllerView extends Component {
     componentDidMount() {
         this._storeInstance.connect(this);
     }
+    componentWillUnmount() {
+        this._storeInstance.disconnect(this);
+    }
 }
 //# sourceMappingURL=ControllerView.js.map

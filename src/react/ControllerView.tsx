@@ -20,4 +20,8 @@ export class ControllerView extends Component<any,any> {
 	componentDidMount():void{
 		this._storeInstance.connect(this);
 	}
+
+	componentWillUnmount(){
+		this._storeInstance.disconnect(this);
+	}
 }

@@ -79,6 +79,11 @@ export class Store {
 			},action);
 	}
 
+	public disconnect(component:ControllerView){
+		this.state = this.state.delete(component.getStateKey());
+		this.combiner.removeReducer(component.getStateKey());
+	}
+
 	public dispatch(action: Action): any {
 		if (!this.readyForActions){
 			this.queue.push(action);
