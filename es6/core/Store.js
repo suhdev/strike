@@ -56,6 +56,10 @@ export class Store {
     disconnect(component) {
         this.state = this.state.delete(component.getStateKey());
         this.combiner.removeReducer(component.getStateKey());
+        let idx = this.components.indexOf(component);
+        if (idx !== -1) {
+            this.components.splice(idx, 1);
+        }
     }
     dispatch(action) {
         if (!this.readyForActions) {

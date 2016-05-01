@@ -90,6 +90,10 @@ export class Store {
 	public disconnect(component:ControllerView){
 		this.state = this.state.delete(component.getStateKey());
 		this.combiner.removeReducer(component.getStateKey());
+		let idx = this.components.indexOf(component);
+		if (idx !== -1){
+			this.components.splice(idx, 1);
+		}
 	}
 
 	public dispatch(action: Action): any {
