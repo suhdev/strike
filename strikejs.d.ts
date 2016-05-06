@@ -57,6 +57,14 @@ declare module "strikejs" {
 		componentDidMount(): void;
 	}
 
+	export interface ServiceFunction {
+		(store: Store, ...args: any[]): Action;
+	}
+
+	export interface ServiceAction extends Action {
+		service: ServiceFunction;
+	}
+
 	export class Store {
 		state: any;
 		middleware: Array<Middleware>;
