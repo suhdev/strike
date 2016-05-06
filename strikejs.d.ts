@@ -81,6 +81,10 @@ declare module "strikejs" {
 			trackChanges?: boolean,
 			readiness?:boolean): Store;
 
+		replaceStateAt(key: string, val: any):void;
+
+		deleteStateAt(key: string): void;
+
 		connect<T extends ControllerViewProps>(elem: ControllerView<T,any>): void;
 
 		addMiddleware(fn: Middleware): void;
