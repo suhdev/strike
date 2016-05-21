@@ -7,8 +7,17 @@ declare module "strikejs" {
 		[arg: string]: V
 	}
 	export interface Action {
-		type: string,
+		type: string|number,
 		data: any
+	}
+
+	export const PROMISE_FETCHING:number;
+	export const PROMISE_RESOLVED:number;
+	export const PROMISE_REJECTED:number;
+	export const PROMISE_NOTIFY:number;
+
+	export interface WorkerAction extends Action {
+		isWorker: boolean;
 	}
 
 	export interface Middleware {
@@ -16,6 +25,8 @@ declare module "strikejs" {
 	}
 
 	export function Promisify(action: PromiseAction<any>, store: Store): Action;
+	export function IntegerPromisify(action: PromiseAction<any>, store: Store): Action;
+	export function WorkerMiddleware(worker: Worker, store: Store): Middleware;
 
 	export function Injectable(injector: Injector): Middleware;
 
