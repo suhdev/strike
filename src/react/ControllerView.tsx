@@ -17,6 +17,7 @@ export class ControllerView<T extends ControllerViewProps,V> extends Component<T
 		this.state = initialState; 
 		this._storeInstance = props.store; 
 		this._stateKey = stateKey;
+		this._reducer = reducer;
 	}
 
 	getReducer(){

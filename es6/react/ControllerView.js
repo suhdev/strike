@@ -6,6 +6,7 @@ export class ControllerView extends Component {
         this.state = initialState;
         this._storeInstance = props.store;
         this._stateKey = stateKey;
+        this._reducer = reducer;
     }
     getReducer() {
         return this._reducer;
