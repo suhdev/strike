@@ -1,31 +1,91 @@
 'use strict';
 import {Dictionary, extractArgumentsFromFunction} from './Util';
+/**
+ * A dependency injection module inspired by AngularJS's dependency injection. 
+ * 
+ * @export
+ * @class Injector
+ */
 export class Injector {
+	/**
+	 * an object literal containing all registered components. 
+	 * 
+	 * @type {Dictionary<any>}
+	 */
 	components: Dictionary<any>;
+	/**
+	 * an object literal containing instances of the registered components. 
+	 * 
+	 * @type {Dictionary<any>}
+	 */
 	instances: Dictionary<any>;
+	/**
+	 * Used internally to resolve dependencies.  
+	 */
 	private stack: Array<any>;
+	/**
+	 * Creates an instance of Injector.
+	 */
 	constructor(){
 		this.components = {};
 		this.instances = {};
 		this.stack = [];
 	}
 
+	/**
+	 * Adds an instance to the list of registered instances within the module. 
+	 * 
+	 * @param {string} name the name of the instance 
+	 * @param {*} c the instance, this can be a primitive, function, or an object. 
+	 * @returns the registered instance. 
+	 */
 	public addInstance(name:string,c:any){
 		return this.instances[name] = c;
 	}
 
+	/**
+	 * Adds a component to the list of registered components within the module. 
+	 * ES6 class components should implement a static function `factory` and should include 
+	 * a static member `$inject` including a list of dependencies. The module will resolve the required 
+	 * dependencies and pass them to the static `factory` method which should return an instance of the 
+	 * compnent. 
+	 * 
+	 * @param {string} name the name of the component. 
+	 * @param {*} c the component to register
+	 * @returns the component. 
+	 */
 	public addComponent(name:string,c:any){
 		return this.components[name] = c; 
 	}
 
+	/**
+	 * Checks whether a component exists or not
+	 * 
+	 * @param {string} name the name of the component. 
+	 * @returns {boolean} true if the component exists false otherwise. 
+	 */
 	public hasComponent(name:string):boolean{
 		return this.components[name];
 	}
 
+	/**
+	 * Checks whether an instance is registered or not. 
+	 * 
+	 * @param {string} name the name of the component. 
+	 * @returns {boolean} returns the instance or undefined otherwise. 
+	 */
 	public hasInstance(name:string):boolean{
 		return this.instances[name];
 	}
 
+	/**
+	 * Injects a function given. 
+	 * 
+	 * @param {*} fn (description)
+	 * @param {*} [ctx] (description)
+	 * @param {...any[]} args (description)
+	 * @returns (description)
+	 */
 	public injectFunction(fn:any,ctx?:any,...args:any[]){
 		if (typeof fn !== "function"){
 			throw new Error("Injector: provided argument is not a function");
@@ -61,6 +121,12 @@ export class Injector {
 		return this.instances[name] = c.factory?c.factory.apply(null,all):c.apply(null, all);
 	}
 
+	/**
+	 * (description)
+	 * 
+	 * @param {string} name (description)
+	 * @returns {*} (description)
+	 */
 	public get(name:string):any{
 		if (this.instances[name]){
 			return this.instances[name]; 
@@ -71,11 +137,50 @@ export class Injector {
 		return this._inject(name, this.components[name]);
 	}
 
+	/**
+	 * (description)
+	 * 
+	 * @param {string} name (description)
+	 * @param {Object} o (description)
+	 * @returns {Injector} (description)
+	 */
 	public register(name: string, o: Object): Injector;
+	/**
+	 * (description)
+	 * 
+	 * @param {string} name (description)
+	 * @param {number} n (description)
+	 * @returns {Injector} (description)
+	 */
 	public register(name: string, n: number): Injector;
+	/**
+	 * (description)
+	 * 
+	 * @param {string} name (description)
+	 * @param {Function} fn (description)
+	 * @returns {Injector} (description)
+	 */
 	public register(name: string, fn: Function): Injector;
+	/**
+	 * (description)
+	 * 
+	 * @param {string} name (description)
+	 * @param {Array<any>} array (description)
+	 * @returns {Injector} (description)
+	 */
 	public register(name:string, array: Array<any>): Injector;
+	/**
+	 * (description)
+	 * 
+	 * @param {Array<any>} array (description)
+	 * @returns {Injector} (description)
+	 */
 	public register(array: Array<any>): Injector;
+	/**
+	 * (description)
+	 * 
+	 * @returns {Injector} (description)
+	 */
 	public register():Injector
 	{
 		let name: string, 

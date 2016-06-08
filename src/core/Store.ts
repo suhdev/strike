@@ -7,14 +7,14 @@ import {ControllerView} from '../react/ControllerView';
 import {Action} from './Action';
 import * as Immutable from 'immutable';
 export class Store {
-	state:any;
+	state:Immutable.Map<string,any>;
 	queue: Action[];
 	middleware:Array<Middleware>;
 	subscribers:Array<Subscriber>;
 	combiner:Combiner;
 	prevState:any;
 	prevActions:Array<any>;
-	components:ControllerView[];
+	components:ControllerView<any,any>[];
 	trackChanges:boolean;
 	readyForActions: boolean;
 
@@ -25,7 +25,7 @@ export class Store {
 		readiness?:boolean){
 		let v:any = Immutable.Map;
 		this.readyForActions = readiness || false;
-		this.state = initialState || new v({}); 
+		this.state = initialState || Immutable.Map<string,any>({}); 
 		this.combiner = combiner;
 		this.middleware = middleware || [];
 		this.subscribers = [];
@@ -36,8 +36,11 @@ export class Store {
 		this.queue = [];
 	}
 
-	public connect(elem:ControllerView) {
+	public connect(elem:ControllerView<any,any>) {
+		let key = elem.getStateKey();
 		this.components.push(elem);
+		this.combiner.addReducer(key,elem.getReducer());
+		this.replaceStateAt(key,Immutable.Map(elem.state));
 	}
 
 	public addMiddleware(fn:Middleware):void{
@@ -61,7 +64,7 @@ export class Store {
 	}
 
 	public getStateAt(key:string):any{
-		return this.state[key];
+		return this.state.get(key);
 	}
 
 	public getState():any{
@@ -87,8 +90,9 @@ export class Store {
 			},action);
 	}
 
-	public disconnect(component:ControllerView){
+	public disconnect(component:ControllerView<any,any>){
 		this.state = this.state.delete(component.getStateKey());
+		this.state = this.state.set(component.getStateKey(),null);
 		this.combiner.removeReducer(component.getStateKey());
 		let idx = this.components.indexOf(component);
 		if (idx !== -1){

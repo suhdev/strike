@@ -3,7 +3,7 @@ export class Store {
     constructor(initialState, combiner, middleware, trackChanges, readiness) {
         let v = Immutable.Map;
         this.readyForActions = readiness || false;
-        this.state = initialState || new v({});
+        this.state = initialState || Immutable.Map({});
         this.combiner = combiner;
         this.middleware = middleware || [];
         this.subscribers = [];
@@ -14,7 +14,10 @@ export class Store {
         this.queue = [];
     }
     connect(elem) {
+        let key = elem.getStateKey();
         this.components.push(elem);
+        this.combiner.addReducer(key, elem.getReducer());
+        this.replaceStateAt(key, Immutable.Map(elem.state));
     }
     addMiddleware(fn) {
         this.middleware.push(fn);
@@ -33,7 +36,7 @@ export class Store {
         this.subscribers.push(s);
     }
     getStateAt(key) {
-        return this.state[key];
+        return this.state.get(key);
     }
     getState() {
         return this.state;
@@ -55,6 +58,7 @@ export class Store {
     }
     disconnect(component) {
         this.state = this.state.delete(component.getStateKey());
+        this.state = this.state.set(component.getStateKey(), null);
         this.combiner.removeReducer(component.getStateKey());
         let idx = this.components.indexOf(component);
         if (idx !== -1) {
