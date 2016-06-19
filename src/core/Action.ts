@@ -46,7 +46,13 @@ export interface PromiseAction<T> extends Action{
  * @interface ServiceFunction
  */
 export interface ServiceFunction {
-	(store: Store, ...args: any[]): Action;
+	(...args: any[]): Action;
+
+	/**
+	 * an array of component names to be injected into the service function. 
+	 * 
+	 * @type {string[]}
+	 */
 	$inject:string[];
 }
 

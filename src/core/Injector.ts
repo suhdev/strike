@@ -79,9 +79,9 @@ export class Injector {
 	}
 
 	/**
-	 * Injects a function given. 
+	 * Given a function that requires access to some components, this method injects the function with the required  
 	 * 
-	 * @param {*} fn (description)
+	 * @param {Function|ServiceFunction} fn the function to inject
 	 * @param {*} [ctx] (description)
 	 * @param {...any[]} args (description)
 	 * @returns (description)

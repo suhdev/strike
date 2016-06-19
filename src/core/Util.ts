@@ -1,12 +1,22 @@
 "use strict";
+/**
+ * An interface representing an object literal 
+ * 
+ * @export
+ * @interface Dictionary
+ * @template V
+ */
 export interface Dictionary<V>{
 	[arg:string]:V
 }
 
-export interface Initializer {
-	startUp(): void;
-}
-
+/**
+ * Extracts the names of the parameters from functions
+ * 
+ * @export
+ * @param {Function} fn the function to extract its parameters' names.
+ * @returns {Array<string>} array of parameters names  
+ */
 export function extractArgumentsFromFunction(fn: Function): any {
 	let deps: any;
 	fn.toString()
@@ -17,6 +27,15 @@ export function extractArgumentsFromFunction(fn: Function): any {
 	return deps;
 }
 
+/**
+ * Returns value at a given key with in an object literal. 
+ * 
+ * @export
+ * @param {*} object the object to use 
+ * @param {string} path the path to return its value 
+ * @param {string} p path separator, defaults to '.'
+ * @returns {*} the value at the given key 
+ */
 export function getDataAt(object: any, path: string, p: string): any {
 	let o: any = object,
 		key: string,
@@ -27,6 +46,16 @@ export function getDataAt(object: any, path: string, p: string): any {
 	return temp;
 }
 
+/**
+ * (description)
+ * 
+ * @export
+ * @param {*} object (description)
+ * @param {string} path (description)
+ * @param {*} value (description)
+ * @param {string} p (description)
+ * @returns {*} (description)
+ */
 export function setDataAt(object: any, path: string, value: any, p: string): any {
 	let o: any = object,
 		key: string,
@@ -38,6 +67,14 @@ export function setDataAt(object: any, path: string, value: any, p: string): any
 	temp[lastKey] = value;
 }
 
+/**
+ * (description)
+ * 
+ * @export
+ * @param {string} value (description)
+ * @param {*} replacements (description)
+ * @returns {string} (description)
+ */
 export function format(value: string, replacements: any): string {
 	if (!replacements) {
 		return value;

@@ -1,0 +1,37 @@
+{
+	"tags":
+	{
+		"allowUnknownTags" : true
+	},
+	"plugins":[
+		 "plugins/markdown"
+		,"/usr/local/lib/node_modules/tsdoc/template/plugins/TSDoc.js"
+	],
+	"opts":
+	{
+		"template"	:"/usr/local/lib/node_modules/tsdoc/template",
+		"recurse"	:"true"
+	},
+	"templates" : {
+		"cleverLinks"     : false,
+		"monospaceLinks"  : false
+	},
+	"source":
+	{
+		"includePattern": "(\\.d)?\\.ts*$"
+	},
+	"markdown"  : {
+		"parser"   : "gfm",
+		"hardwrap" : true
+	},
+	"tsdoc":{
+		"source"		:"./src/",
+		"destination"	:"./docs",
+		"tutorials"		:"",
+		"systemName"	: "strike.dev",
+		"footer"		: "",
+		"copyright"		: "strike.dev Copyright © 2016 suhdev.",
+		"outputSourceFiles" : true,
+		"commentsOnly": true
+	}
+}

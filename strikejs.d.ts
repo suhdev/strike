@@ -1,4 +1,5 @@
 ///<reference path="./typings/react.d.ts"/>
+///<reference path="./typings/immutable/immutable.d.ts" />
 
 declare module "strikejs" {
 	import {Component} from 'react';
@@ -61,7 +62,7 @@ declare module "strikejs" {
 	export class ControllerView<T extends ControllerViewProps,V> extends Component<T, V> {
 		_storeInstance: Store;
 		_stateKey: string;
-		new(props: any, stateKey: string): ControllerView<T,V>;
+		new(props: any, stateKey: string, initialState:any,reducer:Reducer): ControllerView<T,V>;
 
 		getStateKey(): string;
 
@@ -69,7 +70,7 @@ declare module "strikejs" {
 	}
 
 	export interface ServiceFunction {
-		(store: Store, ...args: any[]): Action;
+		(...args: any[]): Action;
 	}
 
 	export interface ServiceAction extends Action {
@@ -77,30 +78,30 @@ declare module "strikejs" {
 	}
 
 	export class Store {
-		state: any;
+		state: Immutable.Map<string,any>;
 		middleware: Array<Middleware>;
 		subscribers: Array<Subscriber>;
 		combiner: Combiner;
-		prevState: any;
+		prevState: Immutable.Map<string,any>;
 		prevActions: Array<any>;
 		components: ControllerView <any, any > [];
 		trackChanges: boolean;
 		readyForAction: boolean;
 		queue: Action[];
 
-		constructor(initialState: any,
+		constructor(initialState: Immutable.Map<string,any>,
 			combiner: Combiner,
 			middleware?: Array<Middleware>,
 			trackChanges?: boolean,
 			readiness?: boolean);
 
-		new(initialState: any,
+		new(initialState: Immutable.Map<string,any>,
 			combiner: Combiner,
 			middleware?: Array<Middleware>,
 			trackChanges?: boolean,
 			readiness?:boolean): Store;
 
-		replaceStateAt(key: string, val: any):void;
+		replaceStateAt(key: string, val: Immutable.Map<string,any>):void;
 
 		deleteStateAt(key: string): void;
 
@@ -115,7 +116,7 @@ declare module "strikejs" {
 		prev(): void;
 
 		subscribe(s: Subscriber): void;
-		getStateAt(key: string): any;
+		getStateAt(key: string): Immutable.Map<string,any>;
 
 		getState(): any;
 
@@ -125,7 +126,7 @@ declare module "strikejs" {
 
 		dispatch(action: Action): any;
 		static singleton: Store;
-		static create(initialState: any,
+		static create(initialState: Immutable.Map<string,any>,
 			combiner: Combiner,
 			middleware?: Array<Middleware>,
 			trackChanges?: boolean,
