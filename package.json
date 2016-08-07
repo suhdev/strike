@@ -1,7 +1,8 @@
 {
   "name": "strikejs",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "main": "index.js",
+  "jsnext:main":"es6/index.js",
   "jspm": {
     "registry": "npm",
     "main": "es6/index.js",
@@ -24,12 +25,14 @@
   },
   "dependencies": {
     "immutable": "^3.8.1",
+    "nunjucks": "^2.4.2",
     "react": "^15.0.2",
     "react-dom": "^15.0.2"
   },
   "devDependencies": {
     "bluebird": "^3.2.2",
     "jslint": "^0.10.1",
+    "nunjucks": "^2.4.2",
     "tslint": "^3.10.2",
     "typescript": "^1.8.10"
   }

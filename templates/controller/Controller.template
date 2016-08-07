@@ -1,0 +1,17 @@
+import * as React from 'react';
+import * as ReactDOM from 'react-dom'; 
+import {<% controller.name %>CtrlProps, <% controller.name %>CtrlState, <% controller.name %>CtrlInitialState} from './StateAndProps'; 
+
+
+export class <% controller.name %>Ctrl extends ControllerView<<% controller.name %>CtrlProps,<% controller.name %>CtrlState>{
+    constructor(props:<% controller.name %>Props){
+        super(props);
+        this.state = <% controller.name %>InitialState;
+    }
+
+    render(){
+        return (
+            <div className=""></div>
+        ); 
+    }
+}
