@@ -1,10 +1,10 @@
 ///<reference path="./typings/react.d.ts"/>
 ///<reference path="./typings/immutable/immutable.d.ts" />
 
-declare module "strikejs" {
-	import {Component} from 'react';
+declare namespace StrikeJs {
+	
 
-	interface Dictionary<V> {
+	export interface Dictionary<V> {
 		[arg: string]: V
 	}
 	export interface Action {
@@ -12,7 +12,7 @@ declare module "strikejs" {
 		data: any
 	}
 
-	interface StatefulComponent<T> {
+	export interface StatefulComponent<T> {
 		getStateKey():string;
 		getReducer():Reducer;
 		setState(state:T,onDone?:()=>void):void;
@@ -66,7 +66,7 @@ declare module "strikejs" {
 		store: Store;
 	}
 
-	export class ControllerView<T extends ControllerViewProps,V> extends Component<T, V> {
+	export class ControllerView<T extends ControllerViewProps,V> extends __React.Component<T, V> {
 		_storeInstance: Store;
 		_stateKey: string;
 		new(props: any, stateKey: string, initialState:any,reducer:Reducer): ControllerView<T,V>;
@@ -114,6 +114,8 @@ declare module "strikejs" {
 		connect<T extends ControllerViewProps>(elem: ControllerView<T,any>): void;
 
 		addMiddleware(fn: Middleware): void;
+
+		executeWithState<T>(fn:(...args:any[])=>T,statekeys:string[]):T;
 
 		removeMiddleware(fn: Middleware): void;
 		prev(): void;
@@ -181,4 +183,8 @@ declare module "strikejs" {
 		public register(): Injector;
 	}
 
+}
+
+declare module "strikejs" {
+	export = StrikeJs
 }
