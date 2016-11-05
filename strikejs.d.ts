@@ -69,6 +69,7 @@ declare namespace StrikeJs {
 	export class ControllerView<T extends ControllerViewProps,V> extends __React.Component<T, V> {
 		_storeInstance: Store;
 		_stateKey: string;
+		constructor(props: any, stateKey: string, initialState:any,reducer:Reducer);
 		new(props: any, stateKey: string, initialState:any,reducer:Reducer): ControllerView<T,V>;
 
 		getStateKey(): string;
