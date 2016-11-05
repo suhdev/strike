@@ -1,17 +1,19 @@
-import { Component } from 'react';
-export class ControllerView extends Component {
+import * as React from 'react';
+export class RoutableControllerView extends React.Component {
     constructor(props, stateKey, initialState, reducer) {
         super(props);
+        this.props = props;
         this.state = initialState;
         this._storeInstance = props.store;
         this._stateKey = stateKey;
         this._reducer = reducer;
-    }
-    getReducer() {
-        return this._reducer;
+        this._router = props.router;
     }
     getStateKey() {
         return this._stateKey;
+    }
+    getReducer() {
+        return this._reducer;
     }
     componentDidMount() {
         this._storeInstance.connect(this);
@@ -20,4 +22,4 @@ export class ControllerView extends Component {
         this._storeInstance.disconnect(this);
     }
 }
-//# sourceMappingURL=ControllerView.js.map
+//# sourceMappingURL=RoutableControllerView.js.map

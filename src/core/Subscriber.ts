@@ -11,4 +11,6 @@ export interface Subscriber {
 	 * @param {*} newState (description)
 	 */
 	onStateChanged(newState: any): void
+
+	getKey():string;
 }

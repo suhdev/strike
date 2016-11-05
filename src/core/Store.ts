@@ -4,6 +4,12 @@ import {Middleware} from './Middleware';
 import {Subscriber} from './Subscriber';
 import {Combiner} from './Combiner';
 import {ControllerView} from '../react/ControllerView';
+interface StatefulComponent<T> {
+	getStateKey():string;
+	getReducer():Reducer;
+	setState(state:T,onDone?:()=>void):void;
+	state:T; 
+}
 import {Action} from './Action';
 import * as Immutable from 'immutable';
 /**
@@ -42,7 +48,7 @@ export class Store {
 	 * 
 	 * @type {Array<Subscriber>}
 	 */
-	subscribers:Array<Subscriber>;
+	subscribers:Dictionary<Subscriber>;
 	/**
 	 * A combiner is responsible for creating the application's next state upon receiving an Action. 
 	 * All {ControllerView} are registered with the combiner which receives the overall state of the application 
@@ -69,7 +75,7 @@ export class Store {
 	 * 
 	 * @type {Array<ControllerView<any,any>>}
 	 */
-	components:ControllerView<any,any>[];
+	components:StatefulComponent<any>[];
 	/**
 	 * Whether actions should be tracked or not. 
 	 * Note: the tracked actions are those actions that pass through all the middlewares and are the ones that 
@@ -106,12 +112,21 @@ export class Store {
 		this.state = initialState || Immutable.Map<string,any>({}); 
 		this.combiner = combiner;
 		this.middleware = middleware || [];
-		this.subscribers = [];
+		this.subscribers = {};
 		this.prevState = {};
 		this.trackChanges = trackChanges || false;
 		this.prevActions = [];
 		this.components = [];
 		this.queue = [];
+		this.replaceStateAt = this.replaceStateAt.bind(this);
+		this.addMiddleware = this.addMiddleware.bind(this);
+		this.applyMiddleware = this.applyMiddleware.bind(this);
+		this.connect = this.connect.bind(this);
+		this.disconnect = this.disconnect.bind(this);
+		this.dispatch = this.dispatch.bind(this); 
+		this.executeWithState = this.executeWithState.bind(this); 
+		this.getStateAt = this.getStateAt.bind(this);  
+		this.ready = this.ready.bind(this); 
 	}
 
 	/**
@@ -122,11 +137,13 @@ export class Store {
 	 * 
 	 * @param {ControllerView<any,any>} elem (description)
 	 */
-	public connect(elem:ControllerView<any,any>):void {
+	public connect(elem:StatefulComponent<any>):void {
 		let key = elem.getStateKey();
 		this.components.push(elem);
-		this.combiner.addReducer(key,elem.getReducer());
-		this.replaceStateAt(key,Immutable.Map(elem.state));
+		if (elem.getReducer){
+			this.combiner.addReducer(key,elem.getReducer());
+		}
+		this.replaceStateAt(key,Immutable.Map<string,any>(elem.state));
 	}
 
 	/**
@@ -161,15 +178,6 @@ export class Store {
 	public prev():void{
 		let action: Action = this.prevActions.pop();
 		action && this.dispatch(action);
-	}
-
-	/**
-	 * This is experimental. Do not use in your applications. 
-	 * 
-	 * @param {Subscriber} s 
-	 */
-	public subscribe(s:Subscriber){
-		this.subscribers.push(s);
 	}
 
 	/**
@@ -283,6 +291,13 @@ export class Store {
 				}
 			});
 		}
+	}
+
+	executeWithState<T>(fn:(...args:any[])=>T,statekeys:string[]):T{
+		let st = this;
+		return fn(statekeys.map((e)=>{
+			return st.getStateAt(e); 
+		}));
 	}
 
 	/**
