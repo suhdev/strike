@@ -12,6 +12,13 @@ declare module "strikejs" {
 		data: any
 	}
 
+	interface StatefulComponent<T> {
+		getStateKey():string;
+		getReducer():Reducer;
+		setState(state:T,onDone?:()=>void):void;
+		state:T; 
+	}
+
 	export const PROMISE_FETCHING:number;
 	export const PROMISE_RESOLVED:number;
 	export const PROMISE_REJECTED:number;
@@ -80,11 +87,10 @@ declare module "strikejs" {
 	export class Store {
 		state: Immutable.Map<string,any>;
 		middleware: Array<Middleware>;
-		subscribers: Array<Subscriber>;
 		combiner: Combiner;
 		prevState: Immutable.Map<string,any>;
 		prevActions: Array<any>;
-		components: ControllerView <any, any > [];
+		components: StatefulComponent <any> [];
 		trackChanges: boolean;
 		readyForAction: boolean;
 		queue: Action[];
@@ -110,12 +116,7 @@ declare module "strikejs" {
 		addMiddleware(fn: Middleware): void;
 
 		removeMiddleware(fn: Middleware): void;
-
-
-
 		prev(): void;
-
-		subscribe(s: Subscriber): void;
 		getStateAt(key: string): Immutable.Map<string,any>;
 
 		getState(): any;
