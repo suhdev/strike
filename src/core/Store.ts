@@ -130,7 +130,7 @@ export class Store {
 	}
 
 	/**
-	 * Connect's a {ControllerView} component to the application store. Mainly three things happen here:
+	 * Connects a {ControllerView} component to the application store. Mainly three things happen here:
 	 * 1. Add the {ControllerView} component to the list of components within the store. 
 	 * 2. Register the {ControllerView} component's Reducer with the {Combiner}. 
 	 * 3. Set the state at the {ControllerView} component's state key to the current state of the {ControllerView} component's state. The state is registered as an instance of {Immutable.Map<string,any>}.
@@ -243,7 +243,7 @@ export class Store {
 	 * 
 	 * @param {ControllerView<any,any>} component 
 	 */
-	public disconnect(component:ControllerView<any,any>){
+	public disconnect(component:StatefulComponent<any>){
 		let key = component.getStateKey();
 		this.combiner.removeReducer(key);
 		this.state = this.state.delete(key);
